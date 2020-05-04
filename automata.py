@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from regex import RegExTree
 
-LAMBDA = "/\\"
+LAMBDA = "λ"
 
 class LambdaNFA:
     def __init__(self, graph: nx.DiGraph = None):
@@ -236,21 +236,26 @@ class DFA:
         
         return False
         
-                
+with open('regex.txt', 'r') as f:
+    regex = f.readline().strip()
 
+# Create RegEx Parse Tree
+tree = RegExTree(regex)
 
-r = 'bao(ba|ab)*'
-t = RegExTree(r)
+# Create LambdaNFA
+lnfa = LambdaNFA.fromRegExTree(tree)
+lnfa.draw('lambdaNFA.png')
 
-n = LambdaNFA.fromRegExTree(t)
-print(n.initial_state, n.final_state)
-n.draw('lambdaNFA.png')
+dfa = DFA(lnfa)
+dfa.build_transition_matrix()
+dfa.build_graph()
+dfa.draw('DFA.png')
 
-print(n.parse('aaaaabbabababbac'))
-
-nn = DFA(n)
-nn.build_transition_matrix()
-print(nn.transition, nn.final_states)
-nn.build_graph()
-nn.draw('DFA.png')
-print(nn.parse('bao'))
+with open('output.txt', 'w+') as o:
+        with open('words.txt', 'r') as f:
+            words = []
+            while line := f.readline().strip():
+                words.append(line)
+        
+        for word in words:
+            print(f'{word} | {"LNFA OK" if lnfa.parse(word) else "LNFA NO"} | {"DFA OK" if dfa.parse(word) else "DFA NO"}', file=o)

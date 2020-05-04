@@ -1,0 +1,8 @@
+aaaaaaaaaac | LNFA OK | DFA OK
+bbbbc | LNFA OK | DFA OK
+aabbc | LNFA OK | DFA OK
+aaabbbc | LNFA OK | DFA OK
+aaaa | LNFA NO | DFA NO
+ccc | LNFA NO | DFA NO
+gg | LNFA NO | DFA NO
+c | LNFA OK | DFA OK
